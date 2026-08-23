@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Order Confirmed</title>
+    <style>
+      :root {
+        --primary: #1a1a1a;
+        --accent: #b89765;
+        --bg-light: #f7f6f2;
+        --card-bg: #ffffff;
+        --border-color: #e5e2da;
+        --font-serif: 'Playfair Display', serif;
+        --font-sans: 'Inter', sans-serif;
+      }
+
+      body {
+        background: var(--bg-light);
+        font-family: var(--font-sans);
+        margin: 0;
+        padding: 0;
+      }
+
+      .main {
+        margin-left: 260px;
+        padding: 50px 60px;
+        min-height: 100vh;
+      }
+
+      .success-card {
+        max-width: 650px;
+        margin: 40px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        text-align: center;
+      }
+
+      .icon-circle {
+        width: 80px;
+        height: 80px;
+        background: #e6f4ea;
+        color: #137333;
+        font-size: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px auto;
+      }
+
+      .success-title {
+        font-family: var(--font-serif);
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+
+      .order-id {
+        font-size: 15px;
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 25px;
+      }
+
+      .details-box {
+        text-align: left;
+        background: #faf8f5;
+        padding: 20px;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        margin: 25px 0;
+      }
+
+      .details-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 14px;
+      }
+
+      .btn-home {
+        display: inline-block;
+        padding: 12px 24px;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: background 0.2s;
+      }
+
+      .btn-home:hover {
+        background: var(--accent);
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'includes/sidebar.html' %}
+
+    <div class="main">
+      <div class="success-card">
+        <div class="icon-circle">✓</div>
+        <h2 class="success-title">Order Placed Successfully!</h2>
+        <div class="order-id">Order Reference ID: #{{ order.id }}</div>
+
+        <p style="color: #666; font-size: 14px;">Thank you <strong>{{ order.name }}</strong> for your purchase. We have received your order and will process it shortly.</p>
+
+        <div class="details-box">
+          <h4 style="margin-bottom: 12px; color: #1a1a1a;">Order Details</h4>
+          <div class="details-row">
+            <span>Payment Method:</span>
+            <strong>{{ order.payment_method }}</strong>
+          </div>
+          <div class="details-row">
+            <span>Total Paid:</span>
+            <strong style="color: var(--accent);">₹{{ order.total_amount }}</strong>
+          </div>
+          <div class="details-row">
+            <span>Shipping Address:</span>
+            <span>{{ order.address }}, {{ order.city }} - {{ order.pincode }}</span>
+          </div>
+        </div>
+
+        <a href="{% url 'category_dashboard' %}" class="btn-home">Continue Shopping</a>
+      </div>
+    </div>
+  </body>
+</html>

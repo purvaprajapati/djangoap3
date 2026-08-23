@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      :root {
+        --sidebar-bg: #111111;
+        --accent: #b89765;
+        --accent-hover: #c9ab7a;
+        --text-sidebar: #a0a0a0;
+        --text-active: #ffffff;
+        --border-sidebar: rgba(184, 151, 101, 0.15);
+      }
+
+      /* Sidebar styling */
+      .sidebar {
+        position: fixed;
+        width: 260px;
+        height: 100vh;
+        background: var(--sidebar-bg);
+        padding: 35px 20px;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid var(--border-sidebar);
+        z-index: 100;
+        box-shadow: 4px 0 25px rgba(0, 0, 0, 0.3);
+        overflow-y: auto;
+      }
+
+      .logo {
+        color: #ffffff;
+        font-family: 'Playfair Display', serif;
+        font-size: 26px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 30px;
+        letter-spacing: 1.5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 15px;
+      }
+
+      .sidebar a, .sidebar .dropdown-btn {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: var(--text-sidebar);
+        text-decoration: none;
+        padding: 12px 16px;
+        margin-bottom: 6px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: color 0.2s ease, background-color 0.2s ease;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+      }
+
+      .sidebar a:hover, .sidebar .dropdown-btn:hover {
+        color: var(--accent);
+        background: rgba(184, 151, 101, 0.08);
+      }
+
+      .sidebar a.active, .sidebar .dropdown-btn.active {
+        background: var(--accent) !important;
+        color: var(--text-active) !important;
+        font-weight: 600;
+      }
+
+      .dropdown-btn.active-sub {
+        color: var(--accent) !important;
+        font-weight: 600;
+      }
+
+      .arrow-icon {
+        font-size: 10px;
+        transition: transform 0.2s ease;
+      }
+
+      .dropdown-btn.open .arrow-icon {
+        transform: rotate(90deg);
+      }
+
+      /* Submenus */
+      .submenu {
+        display: none;
+        flex-direction: column;
+        padding-left: 15px;
+        margin-bottom: 6px;
+        border-left: 1px solid rgba(184, 151, 101, 0.2);
+        margin-left: 10px;
+      }
+
+      .submenu.show {
+        display: flex;
+      }
+
+      .submenu a, .submenu .dropdown-btn {
+        font-size: 13px;
+        padding: 8px 12px;
+        margin-bottom: 4px;
+      }
+
+      .nested-submenu {
+        display: none;
+        flex-direction: column;
+        padding-left: 15px;
+        border-left: 1px dashed rgba(184, 151, 101, 0.2);
+        margin-left: 10px;
+      }
+
+      .nested-submenu.show {
+        display: flex;
+      }
+
+      .nested-submenu a {
+        font-size: 12px;
+        padding: 6px 10px;
+      }
+
+      .submenu a.active, .nested-submenu a.active {
+        background: var(--accent) !important;
+        color: #ffffff !important;
+      }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+
+        <h2 class="logo">🧥 Clothing</h2>
+
+        <a href="{% url 'dashboard' %}"
+        class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+        Dashboard
+        </a>
+
+        <a href="{% url 'blog_list' %}"
+        class="{% if request.resolver_match.url_name == 'blog_list' %}active{% endif %}">
+        My Blogs
+        </a>
+
+        <a href="{% url 'all_blogs' %}"
+        class="{% if request.resolver_match.url_name == 'all_blogs' %}active{% endif %}">
+        Blog Feed
+        </a>
+
+        <!-- Category Dropdown -->
+        <button class="dropdown-btn {% if 'category' in request.resolver_match.url_name %}open active{% endif %}" onclick="toggleDropdown(this, 'cat-submenu')">
+          <span>Categories</span>
+          <span class="arrow-icon">▶</span>
+        </button>
+        <div class="submenu {% if 'category' in request.resolver_match.url_name %}show{% endif %}" id="cat-submenu">
+          <a href="{% url 'category_dashboard' %}" class="{% if request.resolver_match.url_name == 'category_dashboard' and not request.GET.gender %}active{% endif %}">
+            Home 
+          </a>
+
+          <!-- Men Submenu -->
+          <button class="dropdown-btn {% if request.GET.gender == 'Men' %}open active-sub{% endif %}" onclick="toggleDropdown(this, 'men-submenu')">
+            <span>Men</span>
+            <span class="arrow-icon">▶</span>
+          </button>
+          <div class="nested-submenu {% if request.GET.gender == 'Men' %}show{% endif %}" id="men-submenu">
+            <a href="{% url 'category_dashboard' %}?gender=Men" class="{% if request.GET.gender == 'Men' and not request.GET.type %}active{% endif %}">All</a>
+            <a href="{% url 'category_dashboard' %}?gender=Men&type=Upper" class="{% if request.GET.gender == 'Men' and request.GET.type == 'Upper' %}active{% endif %}">Upper</a>
+            <a href="{% url 'category_dashboard' %}?gender=Men&type=Lower" class="{% if request.GET.gender == 'Men' and request.GET.type == 'Lower' %}active{% endif %}">Lower</a>
+          </div>
+
+          <!-- Women Submenu -->
+          <button class="dropdown-btn {% if request.GET.gender == 'Women' %}open active-sub{% endif %}" onclick="toggleDropdown(this, 'women-submenu')">
+            <span>Women</span>
+            <span class="arrow-icon">▶</span>
+          </button>
+          <div class="nested-submenu {% if request.GET.gender == 'Women' %}show{% endif %}" id="women-submenu">
+            <a href="{% url 'category_dashboard' %}?gender=Women" class="{% if request.GET.gender == 'Women' and not request.GET.type %}active{% endif %}">All</a>
+            <a href="{% url 'category_dashboard' %}?gender=Women&type=Upper" class="{% if request.GET.gender == 'Women' and request.GET.type == 'Upper' %}active{% endif %}">Upper</a>
+            <a href="{% url 'category_dashboard' %}?gender=Women&type=Lower" class="{% if request.GET.gender == 'Women' and request.GET.type == 'Lower' %}active{% endif %}">Lower</a>
+          </div>
+        </div>
+
+        <a href="{% url 'payment_page' %}"
+        class="{% if request.resolver_match.url_name == 'payment_page' %}active{% endif %}">
+         My Cart
+        </a>
+
+        <a href="{% url 'contacts' %}"
+        class="{% if 'contact' in request.resolver_match.url_name %}active{% endif %}">
+        Contacts
+        </a>
+
+        <a href="{% url 'logout' %}">
+        Logout
+        </a>
+
+    </div>
+
+    <script>
+      function toggleDropdown(btn, id) {
+        const target = document.getElementById(id);
+        if (target.classList.contains('show')) {
+          target.classList.remove('show');
+          btn.classList.remove('open');
+        } else {
+          target.classList.add('show');
+          btn.classList.add('open');
+        }
+      }
+    </script>
+</body>
+</html>

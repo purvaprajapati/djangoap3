@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #1a1a1a;
+        --accent: #b89765;
+        --sidebar-bg: #111111;
+        --bg-light: #f7f6f2;
+        --card-bg: #ffffff;
+        --text-dark: #1a1a1a;
+        --text-muted: #757575;
+        --border-color: #e5e2da;
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+        --shadow-md: 0 12px 30px rgba(0,0,0,0.06);
+        --font-serif: 'Playfair Display', serif;
+        --font-sans: 'Inter', sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-light);
+        font-family: var(--font-sans);
+        color: var(--text-dark);
+      }
+
+      .sidebar {
+        position: fixed;
+        width: 260px;
+        height: 100vh;
+        background: var(--sidebar-bg);
+        padding: 45px 24px;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid rgba(184, 151, 101, 0.15);
+      }
+
+      .logo {
+        color: #ffffff;
+        font-family: var(--font-serif);
+        font-size: 26px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .sidebar a {
+        color: #a0a0a0;
+        text-decoration: none;
+        padding: 14px 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .sidebar a:hover {
+        color: var(--accent);
+      }
+
+      .sidebar a.active {
+        background: var(--accent);
+        color: white;
+        font-weight: 600;
+      }
+
+      .main {
+        margin-left: 260px;
+        padding: 50px 60px;
+        min-height: 100vh;
+      }
+
+      .main h2 {
+        font-family: var(--font-serif);
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 30px;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 25px;
+      }
+
+      .card {
+        background: var(--card-bg);
+        padding: 35px 30px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+        text-align: center;
+        transition: transform 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .card h1 {
+        font-family: var(--font-serif);
+        font-size: 48px;
+        color: var(--accent);
+        margin-bottom: 10px;
+      }
+
+      .card p {
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+      }
+
+      .card a {
+        display: inline-block;
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: background 0.3s ease;
+      }
+
+      .card a:hover {
+        background: var(--accent);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <h2 class="logo">⚙️ Admin</h2>
+      <a href="{% url 'admin_dashboard' %}" class="active">Dashboard</a>
+      <a href="{% url 'admin_users' %}">Users</a>
+      <a href="{% url 'admin_clothes' %}">Clothes Catalog</a>
+      <a href="{% url 'admin_orders' %}">Orders</a>
+      <a href="{% url 'admin_blogs' %}">Blogs</a>
+      <a href="{% url 'admin_contacts' %}">Contacts</a>
+      <a href="{% url 'admin_likes' %}">Likes</a>
+      <a href="{% url 'admin_comments' %}">Comments</a>
+      <a href="{% url 'admin_logout' %}">Logout</a>
+    </div>
+
+    <div class="main">
+
+      <div class="cards">
+        <div class="card">
+          <h1>{{users_count}}</h1>
+          <p>Total Users</p>
+          <a href="{% url 'admin_users' %}">Manage Users</a>
+        </div>
+
+        <div class="card">
+          <h1>{{clothes_count}}</h1>
+          <p>Total Clothes</p>
+          <a href="{% url 'admin_clothes' %}">Manage Clothes</a>
+        </div>
+
+        <div class="card">
+          <h1>{{orders_count}}</h1>
+          <p>Total Orders</p>
+          <a href="{% url 'admin_orders' %}">Manage Orders</a>
+        </div>
+
+        <div class="card">
+          <h1>{{blogs_count}}</h1>
+          <p>Total Blogs</p>
+          <a href="{% url 'admin_blogs' %}">Manage Blogs</a>
+        </div>
+
+        <div class="card">
+          <h1>{{contacts_count}}</h1>
+          <p>Total Contacts</p>
+          <a href="{% url 'admin_contacts' %}">Manage Contacts</a>
+        </div>
+
+        <div class="card">
+          <h1>{{likes_count}}</h1>
+          <p>Total Likes</p>
+          <a href="{% url 'admin_likes' %}">Manage Likes</a>
+        </div>
+
+        <div class="card">
+          <h1>{{comments_count}}</h1>
+          <p>Total Comments</p>
+          <a href="{% url 'admin_comments' %}">Manage Comments</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

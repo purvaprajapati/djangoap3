@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Edit Product</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #1a1a1a;
+        --accent: #b89765;
+        --sidebar-bg: #111111;
+        --bg-light: #f7f6f2;
+        --card-bg: #ffffff;
+        --text-dark: #1a1a1a;
+        --border-color: #e5e2da;
+        --font-serif: 'Playfair Display', serif;
+        --font-sans: 'Inter', sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-light);
+        font-family: var(--font-sans);
+        color: var(--text-dark);
+      }
+
+      .sidebar {
+        position: fixed;
+        width: 260px;
+        height: 100vh;
+        background: var(--sidebar-bg);
+        padding: 45px 24px;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid rgba(184, 151, 101, 0.15);
+      }
+
+      .logo {
+        color: #ffffff;
+        font-family: var(--font-serif);
+        font-size: 26px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .sidebar a {
+        color: #a0a0a0;
+        text-decoration: none;
+        padding: 14px 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .sidebar a:hover {
+        color: var(--accent);
+      }
+
+      .sidebar a.active {
+        background: var(--accent);
+        color: white;
+        font-weight: 600;
+      }
+
+      .main {
+        margin-left: 260px;
+        padding: 50px 60px;
+        min-height: 100vh;
+      }
+
+      .main h2 {
+        font-family: var(--font-serif);
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 25px;
+      }
+
+      .form-card {
+        background: var(--card-bg);
+        padding: 40px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        max-width: 600px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+
+      label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #757575;
+        margin-bottom: -10px;
+      }
+
+      input[type="text"],
+      input[type="number"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+        outline: none;
+        background-color: #fafafa;
+        transition: all 0.3s ease;
+      }
+
+      input:focus, textarea:focus, select:focus {
+        border-color: var(--accent);
+        background-color: #ffffff;
+      }
+
+      .btn-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 10px;
+      }
+
+      button {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      button:hover {
+        background: var(--accent);
+      }
+
+      .btn-cancel {
+        background: #e2e8f0;
+        color: #4a5568;
+        padding: 14px 28px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        text-decoration: none;
+        display: inline-block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <h2 class="logo">⚙️ Admin</h2>
+      <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      <a href="{% url 'admin_users' %}">Users</a>
+      <a href="{% url 'admin_clothes' %}" class="active">Clothes Catalog</a>
+      <a href="{% url 'admin_blogs' %}">Blogs</a>
+      <a href="{% url 'admin_contacts' %}">Contacts</a>
+      <a href="{% url 'admin_likes' %}">Likes</a>
+      <a href="{% url 'admin_comments' %}">Comments</a>
+      <a href="{% url 'admin_logout' %}">Logout</a>
+    </div>
+
+    <div class="main">
+      <h2>Edit Clothing Product</h2>
+
+      <div class="form-card">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <label>Product Name</label>
+          <input type="text" name="name" value="{{ item.name }}" required />
+
+          <label>Description</label>
+          <textarea name="desc" rows="3" required>{{ item.desc }}</textarea>
+
+          <label>Price (₹)</label>
+          <input type="number" name="price" value="{{ item.price }}" required />
+
+          <label>Image URL</label>
+          <input type="file" name="image" value="{{ item.image.url  }}" required />
+
+          <label>Gender</label>
+          <select name="gender" required>
+            <option value="Men" {% if item.gender == "Men" %}selected{% endif %}>Men</option>
+            <option value="Women" {% if item.gender == "Women" %}selected{% endif %}>Women</option>
+          </select>
+
+          <label>Type</label>
+          <select name="type" required>
+            <option value="Upper" {% if item.type == "Upper" %}selected{% endif %}>Upper</option>
+            <option value="Lower" {% if item.type == "Lower" %}selected{% endif %}>Lower</option>
+          </select>
+
+          <div class="btn-group">
+            <button type="submit">Update Product</button>
+            <a href="{% url 'admin_clothes' %}" class="btn-cancel">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

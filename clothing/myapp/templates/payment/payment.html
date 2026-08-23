@@ -1,0 +1,407 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Checkout & Payment</title>
+    <style>
+      :root {
+        --primary: #1a1a1a;
+        --accent: #b89765;
+        --accent-hover: #9c7d4d;
+        --bg-light: #f7f6f2;
+        --card-bg: #ffffff;
+        --text-dark: #1a1a1a;
+        --text-muted: #757575;
+        --border-color: #e5e2da;
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+        --shadow-md: 0 12px 30px rgba(0,0,0,0.06);
+        --border-radius: 12px;
+        --font-serif: 'Playfair Display', serif;
+        --font-sans: 'Inter', sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-light);
+        font-family: var(--font-sans);
+        color: var(--text-dark);
+      }
+
+      .main {
+        margin-left: 260px;
+        padding: 50px 60px;
+        min-height: 100vh;
+      }
+
+      .header-title {
+        font-family: var(--font-serif);
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 30px;
+      }
+
+      .checkout-grid {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr;
+        gap: 30px;
+      }
+
+      .checkout-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: 30px;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 30px;
+      }
+
+      .card-title {
+        font-family: var(--font-serif);
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Cart Table / Items */
+      .cart-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 1px dashed var(--border-color);
+      }
+
+      .cart-item:last-child {
+        border-bottom: none;
+      }
+
+      .item-details {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .item-image {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+      }
+
+      .item-name {
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 4px;
+      }
+
+      .item-price {
+        color: var(--accent);
+        font-weight: 700;
+        font-size: 14px;
+      }
+
+      .qty-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .qty-btn {
+        background: #f0eee8;
+        border: 1px solid var(--border-color);
+        color: #333;
+        width: 28px;
+        height: 28px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .qty-btn:hover {
+        background: var(--accent);
+        color: white;
+        border-color: var(--accent);
+      }
+
+      .remove-btn {
+        color: #d9534f;
+        text-decoration: none;
+        font-size: 12px;
+        margin-left: 10px;
+        font-weight: 600;
+      }
+
+      /* Form Fields */
+      .form-group {
+        margin-bottom: 18px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: var(--text-dark);
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .form-control:focus {
+        border-color: var(--accent);
+      }
+
+      .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+      }
+
+      /* Payment Options */
+      .payment-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .payment-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .payment-option:hover {
+        border-color: var(--accent);
+        background: #faf8f5;
+      }
+
+      .payment-option input[type="radio"] {
+        accent-color: var(--accent);
+        width: 18px;
+        height: 18px;
+      }
+
+      .payment-option label {
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        flex-grow: 1;
+      }
+
+      /* Order Summary Box */
+      .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      .summary-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 0;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--primary);
+        border-top: 2px solid var(--border-color);
+        margin-top: 10px;
+      }
+
+      .btn-submit {
+        width: 100%;
+        padding: 16px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+      }
+
+      .btn-submit:hover {
+        background: var(--accent);
+        box-shadow: 0 4px 15px rgba(184, 151, 101, 0.3);
+      }
+
+      .empty-cart {
+        text-align: center;
+        padding: 40px;
+        color: var(--text-muted);
+      }
+
+      .empty-cart a {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 10px 20px;
+        background: var(--accent);
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    {% include 'includes/sidebar.html' %}
+
+    <div class="main">
+      <h2 class="header-title">Checkout & Payment</h2>
+
+      {% if cart_items %}
+        <form method="POST" action="{% url 'place_order' %}">
+          {% csrf_token %}
+          <div class="checkout-grid">
+            
+            <!-- Left Column: Cart Items & Shipping Details -->
+            <div>
+              
+              <!-- 1. Cart Items -->
+              <div class="checkout-card">
+                <div class="card-title">🛒 Cart Items ({{ cart_items.count }})</div>
+                {% for item in cart_items %}
+                  <div class="cart-item">
+                    <div class="item-details">
+                      <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="item-image">
+                      <div>
+                        <div class="item-name">{{ item.product.name }}</div>
+                        <div class="item-price">₹{{ item.product.price }}</div>
+                      </div>
+                    </div>
+                    <div style="text-align: right;">
+                      <div class="qty-control">
+                        <a href="{% url 'update_cart_qty' item.id %}?action=decrease" class="qty-btn">-</a>
+                        <span style="font-weight: bold; width: 24px; text-align: center;">{{ item.quantity }}</span>
+                        <a href="{% url 'update_cart_qty' item.id %}?action=increase" class="qty-btn">+</a>
+                        <a href="{% url 'remove_from_cart' item.id %}" class="remove-btn">Remove</a>
+                      </div>
+                      <div style="font-weight: 700; margin-top: 6px; font-size: 14px;">
+                        ₹{{ item.total_price }}
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+
+              <!-- 2. Shipping Details -->
+              <div class="checkout-card">
+                <div class="card-title">📦 Shipping Details</div>
+                <div class="form-group">
+                  <label for="name">Full Name</label>
+                  <input type="text" id="name" name="name" class="form-control" value="{{ user.name }}" required>
+                </div>
+                <div class="form-group">
+                  <label for="phone">Phone Number</label>
+                  <input type="text" id="phone" name="phone" class="form-control" value="{{ user.phone }}" required>
+                </div>
+                <div class="form-group">
+                  <label for="address">Delivery Address</label>
+                  <textarea id="address" name="address" class="form-control" rows="3" placeholder="Street, Apartment, Landmark..." required></textarea>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" class="form-control" placeholder="e.g. Mumbai" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="pincode">Pincode</label>
+                    <input type="text" id="pincode" name="pincode" class="form-control" placeholder="e.g. 400001" required>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Right Column: Order Summary & Payment Method -->
+            <div>
+              
+              <!-- 3. Payment Method -->
+              <div class="checkout-card">
+                <div class="card-title">💳 Payment Method</div>
+                <div class="payment-options">
+                  <div class="payment-option">
+                    <input type="radio" id="cod" name="payment_method" value="Cash on Delivery" checked>
+                    <label for="cod">💵 Cash on Delivery (COD)</label>
+                  </div>
+                  <div class="payment-option">
+                    <input type="radio" id="card" name="payment_method" value="Credit/Debit Card">
+                    <label for="card">💳 Credit / Debit Card</label>
+                  </div>
+                  <div class="payment-option">
+                    <input type="radio" id="upi" name="payment_method" value="UPI (GPay / PhonePe / Paytm)">
+                    <label for="upi">📱 UPI (Google Pay, PhonePe)</label>
+                  </div>
+                  <div class="payment-option">
+                    <input type="radio" id="netbanking" name="payment_method" value="Net Banking">
+                    <label for="netbanking">🏦 Net Banking</label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. Order Summary -->
+              <div class="checkout-card">
+                <div class="card-title">📋 Order Summary</div>
+                <div class="summary-row">
+                  <span>Subtotal</span>
+                  <span>₹{{ subtotal }}</span>
+                </div>
+                <div class="summary-row">
+                  <span>Shipping Fee</span>
+                  <span>₹{{ shipping_fee }}</span>
+                </div>
+                <div class="summary-total">
+                  <span>Total Payable</span>
+                  <span style="color: var(--accent);">₹{{ total_amount }}</span>
+                </div>
+
+                <button type="submit" class="btn-submit">PLACE ORDER & PAY NOW</button>
+              </div>
+
+            </div>
+
+          </div>
+        </form>
+      {% else %}
+        <div class="checkout-card empty-cart">
+          <h3>Your cart is empty!</h3>
+          <p style="margin-top: 10px;">Please add items to your cart before proceeding to checkout.</p>
+          <a href="{% url 'category_dashboard' %}">Browse Categories</a>
+        </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

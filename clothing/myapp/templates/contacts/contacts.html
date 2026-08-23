@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Contacts</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #1a1a1a;
+        --primary-light: #2b2b2b;
+        --sidebar-bg: #111111;
+        --accent: #b89765;
+        --accent-hover: #9c7d4d;
+        --bg-light: #f7f6f2;
+        --card-bg: #ffffff;
+        --text-dark: #1a1a1a;
+        --text-muted: #757575;
+        --border-color: #e5e2da;
+        --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.03);
+        --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.06);
+        --border-radius: 12px;
+        --font-serif: "Playfair Display", serif;
+        --font-sans: "Inter", sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-light);
+        font-family: var(--font-sans);
+        color: var(--text-dark);
+      }
+
+      /* Main Content styling */
+      .main-content {
+        margin-left: 260px;
+        padding: 50px 60px;
+        width: calc(100% - 260px);
+        min-height: 100vh;
+      }
+
+      .card {
+        background: var(--card-bg);
+        padding: 40px 45px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+      }
+
+      .card-header {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 20px;
+      }
+
+      .card-title {
+        font-family: var(--font-serif);
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary);
+        flex-grow: 1;
+      }
+
+      /* Buttons & Actions */
+      .btn {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid transparent;
+        padding: 12px 20px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+      }
+
+      .add-btn {
+        background: var(--primary);
+        color: white;
+      }
+
+      .add-btn:hover {
+        background: var(--accent);
+        box-shadow: 0 4px 15px rgba(184, 151, 101, 0.25);
+        transform: translateY(-1px);
+      }
+
+      .add-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Search form */
+      form[method="GET"] {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 25px;
+      }
+
+      form[method="GET"] input[type="text"] {
+        padding: 12px 18px !important;
+        width: 320px !important;
+        border-radius: 8px !important;
+        border: 1px solid var(--border-color) !important;
+        font-family: inherit !important;
+        font-size: 14px !important;
+        background-color: #ffffff !important;
+        outline: none !important;
+        transition: all 0.3s ease !important;
+      }
+
+      form[method="GET"] input[type="text"]:focus {
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 0 4px rgba(184, 151, 101, 0.12) !important;
+      }
+
+      form[method="GET"] button.btn {
+        background: var(--primary);
+        color: white;
+        border: 1px solid var(--primary);
+      }
+
+      form[method="GET"] button.btn:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+
+      /* Contacts Table */
+      table.table {
+        width: 100%;
+        margin-top: 15px;
+        border-collapse: collapse;
+      }
+
+      table.table th {
+        background-color: #fafafa;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 1px;
+        padding: 16px 20px;
+        border-bottom: 2px solid var(--border-color);
+        text-align: left;
+      }
+
+      table.table td {
+        padding: 18px 20px;
+        border-bottom: 1px solid #f2eff6;
+        font-size: 14px;
+        color: var(--text-dark);
+      }
+
+      table.table tr:hover td {
+        background-color: #fafafa;
+      }
+
+      table.table tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* Actions inside Table */
+      td .btn {
+        padding: 8px 14px;
+        font-size: 11px;
+        margin-right: 6px;
+        border: 1px solid #e5e2da;
+      }
+
+      .btn-view {
+        background: #ffffff;
+        color: var(--text-dark);
+      }
+
+      .btn-view:hover {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .btn-edit {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .btn-edit:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .btn-delete {
+        background: #fff5f5;
+        color: #c53030;
+        border: 1px solid #fed7d7;
+      }
+
+      .btn-delete:hover {
+        background: #c53030;
+        color: white;
+        border-color: #c53030;
+      }
+
+      td a {
+        text-decoration: none;
+      }
+
+      /* Modal Details */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(5px);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        transition: all 0.3s ease;
+      }
+
+      .modal-box {
+        background: var(--card-bg);
+        padding: 45px;
+        border-radius: var(--border-radius);
+        width: 100%;
+        max-width: 460px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(184, 151, 101, 0.2);
+        position: relative;
+        animation: modalFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      @keyframes modalFadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-box h2 {
+        font-family: var(--font-serif);
+        font-size: 26px;
+        margin-bottom: 25px;
+        color: var(--primary);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding-bottom: 15px;
+      }
+
+      .modal-box p {
+        font-size: 15px;
+        padding: 15px 0;
+        border-bottom: 1px solid #f9f9f9;
+        color: var(--text-dark);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .modal-box p span {
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      .modal-box .close-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.2s;
+        padding: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+
+      .modal-box .close-btn:hover {
+        color: #c53030;
+      }
+
+      @media (max-width: 992px) {
+        .main-content {
+          margin-left: 0;
+          padding: 30px;
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Sidebar -->
+    {% include 'includes/sidebar.html' %}
+
+    <div class="main-content">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">My Contacts</h2>
+
+          <a href="{% url 'add_contact' %}" class="btn btn-primary add-btn">
+            + Add Contact
+          </a>
+        </div>
+
+        <form method="GET">
+          <input
+            type="text"
+            name="q"
+            placeholder="Search Contact"
+            value="{{request.GET.q}}"
+            style=" padding: 10px; width: 300px; border-radius: 6px; border: 1px solid #ccc; "/>
+          <button class="btn btn-primary">Search</button>
+        </form>
+        <table class="table">
+          <thead>
+            <tr>
+              <!-- <th>ID</th> -->
+              <th>Sr.No</th>
+              <th>Name</th>
+              <th>Contact No</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for contact in contacts %}
+            <tr>
+              <!-- <td>#{{contact.id}}</td> -->
+              <td>{{ forloop.counter }}</td>
+              <td>{{contact.name}}</td>
+              <td>{{contact.contact_no}}</td>
+              <td>
+                <button
+                  class="btn btn-view"
+                  onclick="showContact(
+                  '{{contact.id}}',
+                  '{{contact.name}}',
+                  '{{contact.contact_no}}'
+                  )">
+                  View
+                </button>
+
+                <a href="{% url 'update_contact' contact.id %}">
+                  <button class="btn btn-edit">Update</button>
+                </a>
+
+                <a
+                  href="{% url 'delete_contact' contact.id %}"
+                  onclick="return confirm('Are you sure you want to delete this contact?',);">
+                  <button class="btn btn-delete">Delete</button>
+                </a>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4">No Contacts Found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="contactModal" class="modal-overlay">
+      <div class="modal-box">
+        <button onclick="closeModal()" class="close-btn">&times;</button>
+
+        <h2>Contact Details</h2>
+
+        <p>ID :<span id="cid"></span></p>
+
+        <p>Name :<span id="cname"></span></p>
+
+        <p>Contact :<span id="cphone"></span></p>
+      </div>
+    </div>
+
+    <script>
+      function showContact(id, name, phone) {
+        document.getElementById("cid").innerHTML = id;
+        document.getElementById("cname").innerHTML = name;
+        document.getElementById("cphone").innerHTML = phone;
+        document.getElementById("contactModal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("contactModal").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

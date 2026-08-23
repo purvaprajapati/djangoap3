@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Clothes Catalog</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #1a1a1a;
+        --accent: #b89765;
+        --sidebar-bg: #111111;
+        --bg-light: #f7f6f2;
+        --card-bg: #ffffff;
+        --text-dark: #1a1a1a;
+        --text-muted: #757575;
+        --border-color: #e5e2da;
+        --shadow-sm: 0 4px 12px rgba(0,0,0,0.03);
+        --font-serif: 'Playfair Display', serif;
+        --font-sans: 'Inter', sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-light);
+        font-family: var(--font-sans);
+        color: var(--text-dark);
+      }
+
+      .sidebar {
+        position: fixed;
+        width: 260px;
+        height: 100vh;
+        background: var(--sidebar-bg);
+        padding: 45px 24px;
+        display: flex;
+        flex-direction: column;
+        border-right: 1px solid rgba(184, 151, 101, 0.15);
+      }
+
+      .logo {
+        color: #ffffff;
+        font-family: var(--font-serif);
+        font-size: 26px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .sidebar a {
+        color: #a0a0a0;
+        text-decoration: none;
+        padding: 14px 20px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .sidebar a:hover {
+        color: var(--accent);
+      }
+
+      .sidebar a.active {
+        background: var(--accent);
+        color: white;
+        font-weight: 600;
+      }
+
+      .main {
+        margin-left: 260px;
+        padding: 50px 60px;
+        min-height: 100vh;
+      }
+
+      .header-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+      }
+
+      .main h2 {
+        font-family: var(--font-serif);
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--primary);
+      }
+
+      .btn-add {
+        background: var(--primary);
+        color: white;
+        text-decoration: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: background 0.3s ease;
+      }
+
+      .btn-add:hover {
+        background: var(--accent);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+      }
+
+      th, td {
+        padding: 18px 24px;
+        text-align: left;
+      }
+
+      th {
+        background-color: #fafafa;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 11px;
+        letter-spacing: 1px;
+        border-bottom: 2px solid var(--border-color);
+      }
+
+      td {
+        border-bottom: 1px solid #f2eff6;
+        font-size: 14px;
+      }
+
+      tr:hover td {
+        background-color: #fafafa;
+      }
+
+      .btn-edit {
+        background: #f0f4ff;
+        color: #3182ce;
+        border: 1px solid #c3dafe;
+        padding: 8px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        margin-right: 8px;
+        display: inline-block;
+      }
+
+      .btn-edit:hover {
+        background: #3182ce;
+        color: white;
+      }
+
+      .btn-del {
+        background: #fff5f5;
+        color: #c53030;
+        border: 1px solid #fed7d7;
+        padding: 8px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-del:hover {
+        background: #c53030;
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <h2 class="logo">⚙️ Admin</h2>
+      <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      <a href="{% url 'admin_users' %}">Users</a>
+      <a href="{% url 'admin_clothes' %}" class="active">Clothes Catalog</a>
+      <a href="{% url 'admin_blogs' %}">Blogs</a>
+      <a href="{% url 'admin_contacts' %}">Contacts</a>
+      <a href="{% url 'admin_likes' %}">Likes</a>
+      <a href="{% url 'admin_comments' %}">Comments</a>
+      <a href="{% url 'admin_logout' %}">Logout</a>
+    </div>
+
+    <div class="main">
+      <div class="header-bar">
+        <h2>Clothes Product Catalog</h2>
+        <a href="{% url 'admin_add_clothes' %}" class="btn-add">+ Add New Product</a>
+      </div>
+
+      <table>
+        <tr>
+          <th>Sr.No</th>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Gender</th>
+          <th>Type</th>
+          <th>Actions</th>
+        </tr>
+
+        {% for item in clothes %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;" />
+          </td>
+          <td>{{ item.name }}</td>
+          <td>₹{{ item.price }}</td>
+          <td>{{ item.gender }}</td>
+          <td>{{ item.type }}</td>
+          <td>
+            <a href="{% url 'admin_edit_clothes' item.id %}" class="btn-edit">Edit</a>
+            <a href="{% url 'admin_delete_clothes' item.id %}" onclick="return confirm('Delete {{ item.name }}?');" class="btn-del">Delete</a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="7">No products found in catalog.</td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </body>
+</html>

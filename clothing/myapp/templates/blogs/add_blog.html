@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Add Blog</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --primary: #1a1a1a;
+        --accent: #b89765;
+        --accent-hover: #9c7d4d;
+        --bg-light: #f7f6f2;
+        --card-bg: #ffffff;
+        --text-dark: #1a1a1a;
+        --text-muted: #757575;
+        --border-color: #e5e2da;
+        --shadow-md: 0 12px 30px rgba(0,0,0,0.06);
+        --border-radius: 12px;
+        --font-serif: 'Playfair Display', serif;
+        --font-sans: 'Inter', sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background: var(--bg-light);
+        font-family: var(--font-sans);
+        color: var(--text-dark);
+      }
+
+      .main-content {
+        margin-left: 260px;
+        padding: 50px 60px;
+        min-height: 100vh;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+
+      .card {
+        background: var(--card-bg);
+        padding: 40px 45px;
+        border-radius: var(--border-radius);
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+        width: 100%;
+        max-width: 680px;
+      }
+
+      h2 {
+        font-family: var(--font-serif);
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 25px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      label {
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        margin-bottom: -10px;
+      }
+
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 14px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 14px;
+        color: var(--text-dark);
+        background-color: #fafafa;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        outline: none;
+      }
+
+      textarea {
+        resize: vertical;
+        line-height: 1.6;
+      }
+
+      input[type="text"]:focus,
+      textarea:focus {
+        border-color: var(--accent);
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(184, 151, 101, 0.12);
+      }
+
+      button {
+        align-self: flex-start;
+        background: var(--primary);
+        color: white;
+        border: 1px solid var(--primary);
+        border-radius: 8px;
+        padding: 12px 28px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      button:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 6px 20px rgba(184, 151, 101, 0.25);
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      @media (max-width: 992px) {
+        .main-content {
+          margin-left: 0;
+          padding: 30px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    {% include 'includes/sidebar.html' %}
+
+    <div class="main-content">
+      <div class="card">
+        <h2>Add Blog</h2>
+
+        <br />
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <label>Title</label>
+
+          <input
+            type="text"
+            name="title"
+            placeholder="Enter Blog Title"
+            required
+          />
+
+          <label>Description</label>
+
+          <textarea
+            name="description"
+            rows="8"
+            placeholder="Enter Blog Description"
+            required
+          ></textarea>
+
+          <button>Save Blog</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

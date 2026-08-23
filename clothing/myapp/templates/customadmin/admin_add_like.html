@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin - Add Like</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+      :root { --primary: #1a1a1a; --accent: #b89765; --sidebar-bg: #111111; --bg-light: #f7f6f2; --border-color: #e5e2da; --font-serif: 'Playfair Display', serif; --font-sans: 'Inter', sans-serif; }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { background: var(--bg-light); font-family: var(--font-sans); color: #1a1a1a; }
+      .sidebar { position: fixed; width: 260px; height: 100vh; background: var(--sidebar-bg); padding: 45px 24px; display: flex; flex-direction: column; border-right: 1px solid rgba(184, 151, 101, 0.15); }
+      .logo { color: #ffffff; font-family: var(--font-serif); font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+      .sidebar a { color: #a0a0a0; text-decoration: none; padding: 12px 18px; margin-bottom: 8px; border-radius: 8px; font-size: 14px; font-weight: 500; }
+      .sidebar a.active { background: var(--accent); color: white; font-weight: 600; }
+      .main { margin-left: 260px; padding: 50px 60px; min-height: 100vh; }
+      .form-card { background: white; max-width: 600px; padding: 35px; border-radius: 12px; border: 1px solid var(--border-color); }
+      .form-group { margin-bottom: 20px; }
+      label { display: block; margin-bottom: 8px; font-size: 13px; font-weight: 600; }
+      select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 14px; }
+      .submit-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
+      .submit-btn:hover { background: var(--accent); }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h2 class="logo">⚙️ Admin</h2>
+      <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+      <a href="{% url 'admin_users' %}">Users</a>
+      <a href="{% url 'admin_clothes' %}">Clothes Catalog</a>
+      <a href="{% url 'admin_blogs' %}">Blogs</a>
+      <a href="{% url 'admin_contacts' %}">Contacts</a>
+      <a href="{% url 'admin_likes' %}" class="active">Likes</a>
+      <a href="{% url 'admin_comments' %}">Comments</a>
+      <a href="{% url 'admin_logout' %}">Logout</a>
+    </div>
+
+    <div class="main">
+      <h2 style="font-family: var(--font-serif); margin-bottom: 25px;">Add Like Record</h2>
+      <div class="form-card">
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label>Select User</label>
+            <select name="user_id" required>
+              <option value="">-- Choose User --</option>
+              {% for u in users %}
+                <option value="{{ u.id }}">{{ u.name }} ({{ u.email }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Select Blog</label>
+            <select name="blog_id" required>
+              <option value="">-- Choose Blog --</option>
+              {% for b in blogs %}
+                <option value="{{ b.id }}">{{ b.title }} (by {{ b.user.name }})</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="submit-btn">Save Like</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
