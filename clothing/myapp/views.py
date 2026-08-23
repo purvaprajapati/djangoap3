@@ -14,10 +14,19 @@ def login_view(request):
         password = request.POST.get("password")
         try:
             user = UserProfile.objects.get(email=email)
-            if check_password(password, user.password):
+            if check_password(password, user.password) or user.password == password:
+                if user.password == password and not user.password.startswith("pbkdf2_sha256$"):
+                    user.password = make_password(password)
+                    user.save()
                 request.session["user_id"] = user.id
                 return redirect("dashboard")
-        except:
+            else:
+                return render(
+                    request,
+                    "accounts/login.html",{
+                        "error": "Invalid Email or Password"
+                    })
+        except UserProfile.DoesNotExist:
             return render(
                 request,
                 "accounts/login.html",{
@@ -457,7 +466,7 @@ def admin_login(request):
             email="admin@gmail.com",
             phone="9999999999",
             dob="2000-01-01",
-            password="admin",
+            password=make_password("admin"),
             is_admin=True
         )
 
@@ -468,13 +477,18 @@ def admin_login(request):
         email = request.POST["email"]
         password = request.POST["password"]
         try:
-            user = UserProfile.objects.get(email=email, password=password)
-            if user.is_admin or email == "admin@gmail.com":
+            user = UserProfile.objects.get(email=email)
+            if (check_password(password, user.password) or user.password == password) and (user.is_admin or email == "admin@gmail.com"):
+                if user.password == password and not user.password.startswith("pbkdf2_sha256$"):
+                    user.password = make_password(password)
+                    user.save()
                 request.session["admin_id"] = user.id
                 return redirect("admin_dashboard")
-            else:
+            elif not (user.is_admin or email == "admin@gmail.com"):
                 return render(request, "customadmin/admin_login.html", {"error": "Access Denied. You are not an Admin."})
-        except:
+            else:
+                return render(request, "customadmin/admin_login.html", {"error": "Invalid Admin Email or Password"})
+        except UserProfile.DoesNotExist:
             return render(request, "customadmin/admin_login.html", {"error": "Invalid Admin Email or Password"})
 
     return render(request, "customadmin/admin_login.html")
@@ -525,7 +539,7 @@ def admin_add_user(request):
             email=email,
             phone=phone,
             dob=dob,
-            password=password
+            password=make_password(password)
         )
         return redirect("admin_users")
     return render(request, "customadmin/admin_add_user.html")
@@ -540,7 +554,9 @@ def admin_edit_user(request, id):
         user_item.email = request.POST["email"]
         user_item.phone = request.POST["phone"]
         user_item.dob = request.POST["dob"]
-        user_item.password = request.POST["password"]
+        new_password = request.POST["password"]
+        if new_password and new_password != user_item.password:
+            user_item.password = make_password(new_password)
         user_item.save()
         return redirect("admin_users")
     context = {"user_item": user_item}
