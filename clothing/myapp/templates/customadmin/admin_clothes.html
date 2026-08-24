@@ -220,7 +220,8 @@
         <tr>
           <td>{{ forloop.counter }}</td>
           <td>
-            <img src="{{ item.image.url }}" alt="{{ item.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;" />
+            <img src="{{ item.image.url }}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80';" alt="{{ item.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;" />
+
           </td>
           <td>{{ item.name }}</td>
           <td>₹{{ item.price }}</td>

@@ -6,3 +6,5 @@ pip install -r requirements.txt
 
 python clothing/manage.py collectstatic --no-input
 python clothing/manage.py migrate
+python clothing/manage.py sync_cloudinary || true
+

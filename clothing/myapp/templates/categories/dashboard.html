@@ -341,9 +341,8 @@
         <div class="products-grid">
           {% for item in clothes %}
             <div class="product-card">
-              <div class="product-image-wrapper">
-                <img class="product-image" src="{{item.image.url }}" alt="{{item.name}}">
-              </div>
+                <img class="product-image" src="{{ item.image.url }}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80';" alt="{{ item.name }}">
+
               <div class="product-info">
                 <h4 class="product-title">{{item.name}}</h4>
                 <div class="product-meta">
