@@ -62,7 +62,10 @@ venv.bak/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-media/
+media/*
+!clothing/media/product/
+!clothing/media/product/*
+
 
 # macOS / IDEs
 .DS_Store
