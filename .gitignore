@@ -68,3 +68,6 @@ media/
 .DS_Store
 .vscode/
 .idea/
+.env
+staticfiles/
+

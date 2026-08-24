@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: djangoap3
+    env: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn --chdir clothing clothing.wsgi:application
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "*"
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false
+      - key: BREVO_SMTP_USER
+        sync: false
+      - key: BREVO_SMTP_KEY
+        sync: false
