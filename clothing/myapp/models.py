@@ -61,25 +61,28 @@ class Clothes(models.Model):
         if not self.image:
             return "https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80"
         
-        name_str = str(self.image.name)
-        if name_str.startswith("http://") or name_str.startswith("https://"):
-            return name_str
-
         try:
             import urllib.parse
-            raw_url = urllib.parse.unquote(str(self.image.url))
-            for proto in ["https://", "http://", "https:/", "http:/"]:
-                idx = raw_url.find(proto)
-                if idx != -1:
-                    clean_url = raw_url[idx:]
-                    if clean_url.startswith("https:/") and not clean_url.startswith("https://"):
-                        clean_url = clean_url.replace("https:/", "https://", 1)
-                    elif clean_url.startswith("http:/") and not clean_url.startswith("http://"):
-                        clean_url = clean_url.replace("http:/", "http://", 1)
-                    return clean_url
-            return raw_url
+            name_str = str(self.image.name) if self.image else ""
+            url_str = str(self.image.url) if hasattr(self.image, 'url') else name_str
+            
+            for s in [name_str, url_str]:
+                if not s:
+                    continue
+                unquoted = urllib.parse.unquote(str(s))
+                for proto in ["https://", "http://", "https:/", "http:/"]:
+                    idx = unquoted.find(proto)
+                    if idx != -1:
+                        clean = unquoted[idx:]
+                        if clean.startswith("https:/") and not clean.startswith("https://"):
+                            clean = clean.replace("https:/", "https://", 1)
+                        elif clean.startswith("http:/") and not clean.startswith("http://"):
+                            clean = clean.replace("http:/", "http://", 1)
+                        return clean
+            return url_str
         except Exception:
             return "https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80"
+
 
 
 
