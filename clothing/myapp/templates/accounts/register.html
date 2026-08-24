@@ -166,7 +166,14 @@
     <div class="container">
         <h2>Registration</h2>
 
+        {% if error %}
+        <div style="background-color: #fee2e2; border: 1px solid #f87171; color: #991b1b; padding: 12px 16px; border-radius: 8px; font-size: 14px; margin-bottom: 15px; text-align: center;">
+            {{ error }}
+        </div>
+        {% endif %}
+
        <form method="POST">
+
             {% csrf_token %}
 
             <input type="text" name="name" placeholder="Enter Name" required>

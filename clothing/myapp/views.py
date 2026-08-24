@@ -39,16 +39,24 @@ def login_view(request):
 
 def register(request):
     if request.method == "POST":
-        user = UserProfile.objects.create(
-            name=request.POST["name"],
-            email=request.POST["email"],
-            phone=request.POST["phone"],
-            dob=request.POST["dob"],
-            password=make_password(request.POST["password"])
-        )
-        request.session["user_id"] = user.id
-        return redirect("dashboard")
+        try:
+            email = request.POST.get("email", "").strip()
+            if UserProfile.objects.filter(email=email).exists():
+                return render(request, "accounts/register.html", {"error": "This email is already registered. Please login or use another email."})
+
+            user = UserProfile.objects.create(
+                name=request.POST.get("name", "").strip(),
+                email=email,
+                phone=request.POST.get("phone", "").strip(),
+                dob=request.POST.get("dob"),
+                password=make_password(request.POST.get("password"))
+            )
+            request.session["user_id"] = user.id
+            return redirect("dashboard")
+        except Exception as e:
+            return render(request, "accounts/register.html", {"error": f"Registration error: {str(e)}"})
     return render(request, "accounts/register.html")
+
 
 
 
