@@ -66,15 +66,21 @@ class Clothes(models.Model):
             return name_str
 
         try:
-            url_str = str(self.image.url)
-            if "res.cloudinary.com" in url_str:
-                for prefix in ["https://", "http://"]:
-                    idx = url_str.rfind(prefix)
-                    if idx > 0:
-                        return url_str[idx:]
-            return url_str
+            import urllib.parse
+            raw_url = urllib.parse.unquote(str(self.image.url))
+            for proto in ["https://", "http://", "https:/", "http:/"]:
+                idx = raw_url.find(proto)
+                if idx != -1:
+                    clean_url = raw_url[idx:]
+                    if clean_url.startswith("https:/") and not clean_url.startswith("https://"):
+                        clean_url = clean_url.replace("https:/", "https://", 1)
+                    elif clean_url.startswith("http:/") and not clean_url.startswith("http://"):
+                        clean_url = clean_url.replace("http:/", "http://", 1)
+                    return clean_url
+            return raw_url
         except Exception:
             return "https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80"
+
 
 
 
