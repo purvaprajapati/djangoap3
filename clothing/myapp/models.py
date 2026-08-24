@@ -52,8 +52,30 @@ class Clothes(models.Model):
     image = models.FileField(upload_to="product/")  
     gender = models.CharField(max_length=10, default="Men")
     type = models.CharField(max_length=10, default="Upper")
+    
     def __str__(self):
         return self.name
+
+    @property
+    def image_url(self):
+        if not self.image:
+            return "https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80"
+        
+        name_str = str(self.image.name)
+        if name_str.startswith("http://") or name_str.startswith("https://"):
+            return name_str
+
+        try:
+            url_str = str(self.image.url)
+            if "res.cloudinary.com" in url_str:
+                for prefix in ["https://", "http://"]:
+                    idx = url_str.rfind(prefix)
+                    if idx > 0:
+                        return url_str[idx:]
+            return url_str
+        except Exception:
+            return "https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80"
+
 
 
 class Like(models.Model):

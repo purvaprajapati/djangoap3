@@ -296,7 +296,8 @@
                 {% for item in cart_items %}
                   <div class="cart-item">
                     <div class="item-details">
-                      <img src="{{ item.product.image.url }}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80';" alt="{{ item.product.name }}" class="item-image">
+                      <img src="{{ item.product.image_url }}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500&q=80';" alt="{{ item.product.name }}" class="item-image">
+
 
                       <div>
                         <div class="item-name">{{ item.product.name }}</div>

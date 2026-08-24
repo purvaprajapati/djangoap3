@@ -395,47 +395,25 @@ def category_dashboard(request):
     if "user_id" not in request.session:
         return redirect("login")
         
-    if Clothes.objects.count() == 0:
-        Clothes.objects.create(
-            name="Jockey Microfiber Men's T-shirt -MV16",
-            desc="Premium breathable microfiber active t-shirt for maximum comfort.",
-            price=799,
-            image="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500",
-            gender="Men",
-            type="Upper"
-        )
-        Clothes.objects.create(
-            name="Men's Slim Fit Cotton Polo Shirt",
-            desc="Classic polo shirt made from 100% combed cotton.",
-            price=999,
-            image="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500",
-            gender="Men",
-            type="Upper"
-        )
-        Clothes.objects.create(
-            name="Men's Cotton Track Pants",
-            desc="Comfortable athletic track pants for workout and leisure.",
-            price=1299,
-            image="https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=500",
-            gender="Men",
-            type="Lower"
-        )
-        Clothes.objects.create(
-            name="Women's Floral Printed Casual Top",
-            desc="Lightweight floral print top for everyday casual wear.",
-            price=699,
-            image="https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?w=500",
-            gender="Women",
-            type="Upper"
-        )
-        Clothes.objects.create(
-            name="Women's High-Waist Denim Jeans",
-            desc="Stylish high-rise stretch denim jeans for modern look.",
-            price=1499,
-            image="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500",
-            gender="Women",
-            type="Lower"
-        )
+    sample_image_map = {
+        "Jockey Microfiber Men's T-shirt -MV16": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=500",
+        "Men's Slim Fit Cotton Polo Shirt": "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=500",
+        "Men's Cotton Track Pants": "https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=500",
+        "Women's Floral Printed Casual Top": "https://images.unsplash.com/photo-1564584217132-2271feaeb3c5?w=500",
+        "Women's High-Waist Denim Jeans": "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=500",
+        "coat": "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?w=500",
+    }
+
+    for c in Clothes.objects.all():
+        img_name = str(c.image.name) if c.image else ""
+        if img_name.startswith("product/") or not img_name.startswith("http"):
+            if c.name in sample_image_map:
+                c.image = sample_image_map[c.name]
+                c.save()
+            elif not img_name.startswith("http"):
+                c.image = "https://images.unsplash.com/photo-1523381294911-8d3cead13475?w=500"
+                c.save()
+
 
     gender = request.GET.get("gender")
     item_type = request.GET.get("type")
